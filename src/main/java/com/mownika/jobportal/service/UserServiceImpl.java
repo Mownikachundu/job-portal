@@ -23,6 +23,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public void registerUser(RegisterUserDto registerUserDto) {
 
+        System.out.println("registerUser() method called");
+
         Optional<User> existingUser =
                 userRepository.findByEmail(registerUserDto.getEmail());
 
