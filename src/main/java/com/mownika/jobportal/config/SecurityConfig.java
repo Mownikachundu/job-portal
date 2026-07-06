@@ -1,5 +1,6 @@
 package com.mownika.jobportal.config;
 
+import com.mownika.jobportal.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -26,5 +27,11 @@ public class SecurityConfig {
                 .formLogin(Customizer.withDefaults());
 
         return http.build();
+    }
+
+    private final CustomUserDetailsService customUserDetailsService;
+
+    public SecurityConfig(CustomUserDetailsService customUserDetailsService) {
+        this.customUserDetailsService = customUserDetailsService;
     }
 }
