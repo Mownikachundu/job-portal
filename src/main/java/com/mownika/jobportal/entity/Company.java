@@ -26,7 +26,7 @@ public class Company {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by", nullable = false)
     private RecruiterProfile createdBy;
 
