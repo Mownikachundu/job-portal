@@ -26,16 +26,15 @@ public class Company {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by", nullable = false)
     private RecruiterProfile createdBy;
 
     public Company() {
     }
 
-    public Company(Long id, String name, String about,
-                   String website, String industry,
-                   LocalDateTime createdAt,
+    public Company(Long id, String name, String about, String website,
+                   String industry, LocalDateTime createdAt,
                    RecruiterProfile createdBy) {
         this.id = id;
         this.name = name;
