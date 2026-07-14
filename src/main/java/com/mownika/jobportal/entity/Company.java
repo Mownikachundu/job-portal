@@ -27,22 +27,22 @@ public class Company {
     private LocalDateTime createdAt;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "created_by", nullable = false)
-    private RecruiterProfile createdBy;
+    @JoinColumn(name = "owner_id", nullable = false, unique = true)
+    private RecruiterProfile owner;
 
     public Company() {
     }
 
     public Company(Long id, String name, String about, String website,
                    String industry, LocalDateTime createdAt,
-                   RecruiterProfile createdBy) {
+                   RecruiterProfile owner) {
         this.id = id;
         this.name = name;
         this.about = about;
         this.website = website;
         this.industry = industry;
         this.createdAt = createdAt;
-        this.createdBy = createdBy;
+        this.owner = owner;
     }
 
     @PrePersist
@@ -74,8 +74,8 @@ public class Company {
         return createdAt;
     }
 
-    public RecruiterProfile getCreatedBy() {
-        return createdBy;
+    public RecruiterProfile getOwner() {
+        return owner;
     }
 
     public void setId(Long id) {
@@ -102,7 +102,7 @@ public class Company {
         this.createdAt = createdAt;
     }
 
-    public void setCreatedBy(RecruiterProfile createdBy) {
-        this.createdBy = createdBy;
+    public void setOwner(RecruiterProfile owner) {
+        this.owner = owner;
     }
 }
