@@ -1,6 +1,9 @@
 package com.mownika.jobportal.service;
 
 import com.mownika.jobportal.dto.CompanyDto;
+import com.mownika.jobportal.entity.Company;
+import com.mownika.jobportal.entity.RecruiterProfile;
+import com.mownika.jobportal.entity.User;
 import com.mownika.jobportal.repository.CompanyRepository;
 import com.mownika.jobportal.repository.RecruiterProfileRepository;
 import com.mownika.jobportal.repository.UserRepository;
@@ -25,5 +28,30 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public void createCompany(CompanyDto companyDto, String email) {
 
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new RuntimeException("User not found"));
+
+        RecruiterProfile recruiter =
+                recruiterProfileRepository.findByUser(user)
+                        .orElseThrow(() ->
+                                new RuntimeException("Recruiter profile not found"));
+
+        if (companyRepository.existsByName(companyDto.getName())) {
+            throw new RuntimeException("Company already exists");
+        }
+
+        Company company = new Company();
+
+        company.setName(companyDto.getName());
+        company.setAbout(companyDto.getAbout());
+        company.setWebsite(companyDto.getWebsite());
+        company.setIndustry(companyDto.getIndustry());
+
+        company.setOwner(recruiter);
+        companyRepository.save(company);
+
+        recruiter.setCompany(company);
+        recruiterProfileRepository.save(recruiter);
     }
 }
