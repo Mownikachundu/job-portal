@@ -5,6 +5,7 @@ import com.mownika.jobportal.dto.RegisterUserDto;
 public interface UserService {
 
     void registerUser(RegisterUserDto registerUserDto);
+    String getUserNameByEmail(String email);
 
 
 }

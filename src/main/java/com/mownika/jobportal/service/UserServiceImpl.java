@@ -22,7 +22,6 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
 
-
     public UserServiceImpl(UserRepository userRepository,
                            RecruiterProfileRepository recruiterProfileRepository,
                            JobSeekerProfileRepository jobSeekerProfileRepository,
@@ -34,6 +33,15 @@ public class UserServiceImpl implements UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @Override
+    public String getUserNameByEmail(String email) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new RuntimeException("User not found"));
+
+        return user.getName();
+    }
 
     @Override
     public void registerUser(RegisterUserDto registerUserDto) {
