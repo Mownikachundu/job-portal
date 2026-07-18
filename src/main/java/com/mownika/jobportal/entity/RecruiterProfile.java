@@ -3,7 +3,7 @@ package com.mownika.jobportal.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "s")
+@Table(name = "recruiter_profiles")
 public class RecruiterProfile {
 
     @Id

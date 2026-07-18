@@ -1,6 +1,7 @@
 package com.mownika.jobportal.controller;
 
 import com.mownika.jobportal.dto.CompanyDto;
+import com.mownika.jobportal.entity.Company;
 import com.mownika.jobportal.service.CompanyService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,6 +36,19 @@ public class CompanyController {
         String email = principal.getName();
         companyService.createCompany(companyDto, email);
         return "redirect:/recruiter/dashboard";
+    }
+
+    @GetMapping("/view")
+    public String viewCompany(Model model,
+                              Principal principal) {
+
+        String email = principal.getName();
+
+        Company company = companyService.getCompanyByRecruiter(email);
+
+        model.addAttribute("company", company);
+
+        return "view-company";
     }
 
 }

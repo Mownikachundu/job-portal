@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>View Company</title>
+</head>
+
+<body>
+
+<h2>Company Details</h2>
+
+<p>
+    <strong>Company Name:</strong>
+    <span th:text="${company.name}"></span>
+</p>
+
+<p>
+    <strong>About:</strong>
+    <span th:text="${company.about}"></span>
+</p>
+
+<p>
+    <strong>Website:</strong>
+    <span th:text="${company.website}"></span>
+</p>
+
+<p>
+    <strong>Industry:</strong>
+    <span th:text="${company.industry}"></span>
+</p>
+
+</body>
+</html>
