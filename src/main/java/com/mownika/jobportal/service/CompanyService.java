@@ -7,5 +7,7 @@ public interface CompanyService {
 
     void createCompany(CompanyDto companyDto, String email);
     Company getCompanyByRecruiter(String email);
+    CompanyDto getCompanyForEdit(String email);
+    void updateCompany(CompanyDto companyDto, String email);
 
 }

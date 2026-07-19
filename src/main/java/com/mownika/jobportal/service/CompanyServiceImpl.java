@@ -69,4 +69,50 @@ public class CompanyServiceImpl implements CompanyService {
 
         return recruiterProfile.getCompany();
     }
+
+    @Override
+    public CompanyDto getCompanyForEdit(String email) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new RuntimeException("User not found"));
+
+        RecruiterProfile recruiterProfile =
+                recruiterProfileRepository.findByUser(user)
+                        .orElseThrow(() ->
+                                new RuntimeException("Recruiter profile not found"));
+
+        Company company = recruiterProfile.getCompany();
+
+        CompanyDto companyDto = new CompanyDto();
+
+        companyDto.setName(company.getName());
+        companyDto.setAbout(company.getAbout());
+        companyDto.setWebsite(company.getWebsite());
+        companyDto.setIndustry(company.getIndustry());
+
+        return companyDto;
+    }
+
+    @Override
+    public void updateCompany(CompanyDto companyDto, String email) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new RuntimeException("User not found"));
+
+        RecruiterProfile recruiterProfile =
+                recruiterProfileRepository.findByUser(user)
+                        .orElseThrow(() ->
+                                new RuntimeException("Recruiter profile not found"));
+
+        Company company = recruiterProfile.getCompany();
+
+        company.setName(companyDto.getName());
+        company.setAbout(companyDto.getAbout());
+        company.setWebsite(companyDto.getWebsite());
+        company.setIndustry(companyDto.getIndustry());
+
+        companyRepository.save(company);
+    }
 }

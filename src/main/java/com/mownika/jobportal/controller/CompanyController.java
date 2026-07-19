@@ -30,8 +30,7 @@ public class CompanyController {
     }
 
     @PostMapping("/create")
-    public String createCompany(@ModelAttribute CompanyDto companyDto,
-                                Principal principal) {
+    public String createCompany(@ModelAttribute CompanyDto companyDto, Principal principal) {
 
         String email = principal.getName();
         companyService.createCompany(companyDto, email);
@@ -39,16 +38,31 @@ public class CompanyController {
     }
 
     @GetMapping("/view")
-    public String viewCompany(Model model,
-                              Principal principal) {
+    public String viewCompany(Model model, Principal principal) {
 
         String email = principal.getName();
-
         Company company = companyService.getCompanyByRecruiter(email);
-
         model.addAttribute("company", company);
 
         return "view-company";
+    }
+
+    @GetMapping("/edit")
+    public String showEditCompanyForm(Model model, Principal principal) {
+
+        String email = principal.getName();
+        CompanyDto companyDto = companyService.getCompanyForEdit(email);
+        model.addAttribute("companyDto", companyDto);
+
+        return "edit-company";
+    }
+
+    @PostMapping("/edit")
+    public String updateCompany(@ModelAttribute CompanyDto companyDto, Principal principal) {
+
+        String email = principal.getName();
+        companyService.updateCompany(companyDto, email);
+        return "redirect:/recruiter/company/view";
     }
 
 }

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Edit Company</title>
+</head>
+
+<body>
+
+<h2>Edit Company</h2>
+
+<form th:action="@{/recruiter/company/edit}"
+      th:object="${companyDto}"
+      method="post">
+
+    <div>
+        <label>Company Name</label>
+        <input type="text" th:field="*{name}">
+    </div>
+
+    <br>
+
+    <div>
+        <label>About</label>
+        <textarea th:field="*{about}"></textarea>
+    </div>
+
+    <br>
+
+    <div>
+        <label>Website</label>
+        <input type="text" th:field="*{website}">
+    </div>
+
+    <br>
+
+    <div>
+        <label>Industry</label>
+        <input type="text" th:field="*{industry}">
+    </div>
+
+    <br>
+
+    <button type="submit">
+        Update Company
+    </button>
+
+</form>
+
+</body>
+</html>
