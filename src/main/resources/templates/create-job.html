@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Create Job</title>
+</head>
+
+<body>
+
+<h2>Create Job</h2>
+
+<form th:action="@{/recruiter/job/create}"
+      th:object="${jobDto}"
+      method="post">
+
+    <div>
+        <label>Job Title</label>
+        <input type="text" th:field="*{title}">
+    </div>
+
+    <br>
+
+    <div>
+        <label>Description</label>
+        <textarea th:field="*{description}"></textarea>
+    </div>
+
+    <br>
+
+    <div>
+        <label>Salary</label>
+        <input type="number" step="0.01" th:field="*{salary}">
+    </div>
+
+    <br>
+
+    <div>
+        <label>Location</label>
+        <input type="text" th:field="*{location}">
+    </div>
+
+    <br>
+
+    <div>
+        <label>Experience Required</label>
+        <input type="number" th:field="*{experienceRequired}">
+    </div>
+
+    <br>
+
+    <button type="submit">
+        Create Job
+    </button>
+
+</form>
+
+</body>
+</html>

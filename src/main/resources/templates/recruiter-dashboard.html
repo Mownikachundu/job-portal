@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <title>Recruiter Dashboard</title>
@@ -7,7 +7,35 @@
 
 <body>
 
-<h2> Welcome <span th:text="${name}"></span>!</h2>
+<h2>Recruiter Dashboard</h2>
+
+<h3 th:text="'Welcome, ' + ${name}"></h3>
+
+<br>
+
+<a th:href="@{/recruiter/company/create}">
+    <button>Create Company</button>
+</a>
+
+<br><br>
+
+<a th:href="@{/recruiter/company/view}">
+    <button>View Company</button>
+</a>
+
+<br><br>
+
+<a th:href="@{/recruiter/job/create}">
+    <button>Create Job</button>
+</a>
+
+<br><br>
+
+<a th:href="@{/recruiter/job/view}">
+    <button>View Jobs</button>
+</a>
+
+<br><br>
 
 <form th:action="@{/logout}" method="post">
     <button type="submit">Logout</button>

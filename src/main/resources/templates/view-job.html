@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>View Job</title>
+</head>
+
+<body>
+
+<h2>Job Details</h2>
+
+<p>
+    <strong>Title:</strong>
+    <span th:text="${job.title}"></span>
+</p>
+
+<p>
+    <strong>Description:</strong>
+    <span th:text="${job.description}"></span>
+</p>
+
+<p>
+    <strong>Salary:</strong>
+    <span th:text="${job.salary}"></span>
+</p>
+
+<p>
+    <strong>Location:</strong>
+    <span th:text="${job.location}"></span>
+</p>
+
+<p>
+    <strong>Experience Required:</strong>
+    <span th:text="${job.experienceRequired}"></span>
+</p>
+
+<p>
+    <strong>Created At:</strong>
+    <span th:text="${#temporals.format(job.createdAt, 'dd MMM yyyy, hh:mm a')}"></span>
+</p>
+
+<br>
+
+<a th:href="@{/recruiter/job/view}">
+    Back to Jobs
+</a>
+
+</body>
+</html>
