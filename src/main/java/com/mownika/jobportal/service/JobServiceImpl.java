@@ -126,4 +126,10 @@ public class JobServiceImpl implements JobService {
 
         jobRepository.delete(job);
     }
+
+    @Override
+    public List<Job> getAllJobs() {
+        return jobRepository.findAll();
+    }
+
 }

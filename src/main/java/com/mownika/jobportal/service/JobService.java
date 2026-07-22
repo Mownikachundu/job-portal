@@ -13,5 +13,6 @@ public interface JobService {
     JobDto getJobForEdit(Long id);
     void updateJob(Long id, JobDto jobDto);
     void deleteJob(Long id);
+    List<Job> getAllJobs();
 
 }
