@@ -33,7 +33,6 @@ public class JobController {
                             Principal principal) {
 
         String email = principal.getName();
-
         jobService.createJob(jobDto, email);
 
         return "redirect:/recruiter/job/view";
@@ -44,9 +43,7 @@ public class JobController {
                            Principal principal) {
 
         String email = principal.getName();
-
         List<Job> jobs = jobService.getCompanyJobs(email);
-
         model.addAttribute("jobs", jobs);
 
         return "view-jobs";
@@ -57,7 +54,6 @@ public class JobController {
                           Model model) {
 
         Job job = jobService.getJobById(id);
-
         model.addAttribute("job", job);
 
         return "view-job";

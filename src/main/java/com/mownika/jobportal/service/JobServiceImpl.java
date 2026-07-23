@@ -5,9 +5,7 @@ import com.mownika.jobportal.entity.Company;
 import com.mownika.jobportal.entity.Job;
 import com.mownika.jobportal.entity.RecruiterProfile;
 import com.mownika.jobportal.entity.User;
-import com.mownika.jobportal.repository.JobRepository;
-import com.mownika.jobportal.repository.RecruiterProfileRepository;
-import com.mownika.jobportal.repository.UserRepository;
+import com.mownika.jobportal.repository.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -20,9 +18,11 @@ public class JobServiceImpl implements JobService {
     private final UserRepository userRepository;
     private final RecruiterProfileRepository recruiterProfileRepository;
 
+
     public JobServiceImpl(JobRepository jobRepository,
                           UserRepository userRepository,
-                          RecruiterProfileRepository recruiterProfileRepository) {
+                          RecruiterProfileRepository recruiterProfileRepository, JobSeekerProfileRepository jobSeekerProfileRepository,
+                          ApplicationRepository applicationRepository) {
 
         this.jobRepository = jobRepository;
         this.userRepository = userRepository;

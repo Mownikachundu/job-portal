@@ -26,6 +26,7 @@ public class CompanyController {
     public String showCreateCompanyForm(Model model) {
 
         model.addAttribute("companyDto", new CompanyDto());
+
         return "create-company";
     }
 
@@ -34,6 +35,7 @@ public class CompanyController {
 
         String email = principal.getName();
         companyService.createCompany(companyDto, email);
+
         return "redirect:/recruiter/dashboard";
     }
 
@@ -62,6 +64,7 @@ public class CompanyController {
 
         String email = principal.getName();
         companyService.updateCompany(companyDto, email);
+
         return "redirect:/recruiter/company/view";
     }
 

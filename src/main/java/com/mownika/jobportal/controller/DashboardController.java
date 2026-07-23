@@ -21,9 +21,7 @@ public class DashboardController {
                                      Principal principal) {
 
         String email = principal.getName();
-
         String name = userService.getUserNameByEmail(email);
-
         model.addAttribute("name", name);
 
         return "recruiter-dashboard";
@@ -34,9 +32,7 @@ public class DashboardController {
                                      Principal principal) {
 
         String email = principal.getName();
-
         String name = userService.getUserNameByEmail(email);
-
         model.addAttribute("name", name);
 
         return "jobseeker-dashboard";
