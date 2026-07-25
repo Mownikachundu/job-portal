@@ -1,5 +1,6 @@
 package com.mownika.jobportal.controller;
 
+import com.mownika.jobportal.entity.Application;
 import com.mownika.jobportal.entity.Job;
 import com.mownika.jobportal.service.ApplicationService;
 import com.mownika.jobportal.service.JobService;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
@@ -45,23 +47,24 @@ public class JobSeekerController {
         return "jobseeker-view-job";
     }
 
-    @GetMapping("/job/apply/{id}")
-    public String applyJob(@PathVariable Long id,
-                           Principal principal) {
+    @PostMapping("/job/apply/{jobId}")
+    public String applyForJob(@PathVariable Long jobId,
+                              Principal principal) {
 
         String email = principal.getName();
-        applicationService.applyJob(id, email);
+
+        applicationService.applyForJob(jobId, email);
 
         return "redirect:/jobseeker/jobs";
     }
 
-    @GetMapping("/my-applications")
+    @GetMapping("/applications")
     public String myApplications(Model model,
                                  Principal principal) {
 
         String email = principal.getName();
-        model.addAttribute("applications",
-                applicationService.getMyApplications(email));
+        List<Application> applications = applicationService.getMyApplications(email);
+        model.addAttribute("applications", applications);
 
         return "my-applications";
     }

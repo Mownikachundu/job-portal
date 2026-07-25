@@ -75,13 +75,6 @@ public class JobServiceImpl implements JobService {
         return jobRepository.findByCompany(company);
     }
 
-    @Override
-    public Job getJobById(Long id) {
-
-        return jobRepository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("Job not found"));
-    }
 
     @Override
     public JobDto getJobForEdit(Long id) {
@@ -131,5 +124,14 @@ public class JobServiceImpl implements JobService {
     public List<Job> getAllJobs() {
         return jobRepository.findAll();
     }
+
+    @Override
+    public Job getJobById(Long id) {
+
+        return jobRepository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("Job not found"));
+    }
+
 
 }

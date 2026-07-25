@@ -41,12 +41,21 @@
 
 <br>
 
-<a th:href="@{/jobseeker/job/apply/{id}(id=${job.id})}">
-    <button>Apply</button>
-</a>
+<form th:action="@{/jobseeker/job/apply/{jobId}(jobId=${job.id})}"
+      method="post">
+
+    <button type="submit">
+        Apply
+    </button>
+
+</form>
+
+<br>
 
 <a th:href="@{/jobseeker/jobs}">
-    <button>Back</button>
+    <button>
+        Back
+    </button>
 </a>
 
 </body>

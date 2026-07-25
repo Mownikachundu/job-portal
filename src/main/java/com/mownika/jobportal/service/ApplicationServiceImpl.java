@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ApplicationServiceImpl implements ApplicationService {
@@ -30,7 +29,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public void applyJob(Long jobId, String email) {
+    public void applyForJob(Long jobId, String email) {
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() ->
@@ -40,14 +39,12 @@ public class ApplicationServiceImpl implements ApplicationService {
                 .orElseThrow(() ->
                         new RuntimeException("Job not found"));
 
-        Optional<Application> existingApplication =
-                applicationRepository.findByJobAndUser(job, user);
-
-        if (existingApplication.isPresent()) {
+        if (applicationRepository.existsByJobAndUser(job, user)) {
             throw new RuntimeException("You have already applied for this job");
         }
 
         Application application = new Application();
+
         application.setJob(job);
         application.setUser(user);
         application.setStatus(ApplicationStatus.APPLIED);

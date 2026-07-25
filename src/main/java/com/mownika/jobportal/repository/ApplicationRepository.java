@@ -11,6 +11,7 @@ import java.util.Optional;
 public interface ApplicationRepository extends JpaRepository<Application, Long> {
 
     Optional<Application> findByJobAndUser(Job job, User user);
+    boolean existsByJobAndUser(Job job, User user);
     List<Application> findByJob(Job job);
     List<Application> findByUser(User user);
 
