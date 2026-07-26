@@ -29,6 +29,9 @@ public class JobSeekerProfile {
     @Column(name = "resume_url", length = 255)
     private String resumeUrl;
 
+    @Column(length = 100)
+    private String experience;
+
     public JobSeekerProfile() {
     }
 
@@ -96,5 +99,13 @@ public class JobSeekerProfile {
 
     public void setResumeUrl(String resumeUrl) {
         this.resumeUrl = resumeUrl;
+    }
+
+    public String getExperience() {
+        return experience;
+    }
+
+    public void setExperience(String experience) {
+        this.experience = experience;
     }
 }
