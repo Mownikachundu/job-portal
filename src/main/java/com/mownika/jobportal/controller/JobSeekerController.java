@@ -68,4 +68,16 @@ public class JobSeekerController {
 
         return "my-applications";
     }
+
+    @GetMapping("/applicants/{jobId}")
+    public String viewApplicants(@PathVariable Long jobId,
+                                 Model model) {
+
+        List<Application> applications =
+                applicationService.getApplicants(jobId);
+
+        model.addAttribute("applications", applications);
+
+        return "view-applicants";
+    }
 }

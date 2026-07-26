@@ -62,4 +62,35 @@ public class ApplicationServiceImpl implements ApplicationService {
 
         return applicationRepository.findByUser(user);
     }
+
+    @Override
+    public List<Application> getApplicants(Long jobId) {
+
+        Job job = jobRepository.findById(jobId)
+                .orElseThrow(() ->
+                        new RuntimeException("Job not found"));
+
+        return applicationRepository.findByJob(job);
+    }
+
+    @Override
+    public Application getApplicationById(Long id) {
+
+        return applicationRepository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("Application not found"));
+    }
+
+    @Override
+    public void updateStatus(Long applicationId,
+                             ApplicationStatus status) {
+
+        Application application = applicationRepository.findById(applicationId)
+                .orElseThrow(() ->
+                        new RuntimeException("Application not found"));
+
+        application.setStatus(status);
+
+        applicationRepository.save(application);
+    }
 }

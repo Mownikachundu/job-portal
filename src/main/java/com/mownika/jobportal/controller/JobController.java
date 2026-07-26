@@ -1,7 +1,10 @@
 package com.mownika.jobportal.controller;
 
 import com.mownika.jobportal.dto.JobDto;
+import com.mownika.jobportal.entity.Application;
+import com.mownika.jobportal.entity.ApplicationStatus;
 import com.mownika.jobportal.entity.Job;
+import com.mownika.jobportal.service.ApplicationService;
 import com.mownika.jobportal.service.JobService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,9 +18,12 @@ import java.util.List;
 public class JobController {
 
     private final JobService jobService;
+    private final ApplicationService applicationService;
 
-    public JobController(JobService jobService) {
+    public JobController(JobService jobService, ApplicationService applicationService) {
+
         this.jobService = jobService;
+        this.applicationService = applicationService;
     }
 
     @GetMapping("/create")
@@ -85,6 +91,26 @@ public class JobController {
 
         jobService.deleteJob(id);
 
+        return "redirect:/recruiter/job/view";
+    }
+
+    @GetMapping("/application/edit/{id}")
+    public String editApplication(@PathVariable Long id,
+                                  Model model) {
+
+        Application app = applicationService.getApplicationById(id);
+
+        model.addAttribute("app", app);
+        model.addAttribute("statuses", ApplicationStatus.values());
+
+        return "edit-application";
+    }
+
+    @PostMapping("/application/edit/{id}")
+    public String updateApplicationStatus(@PathVariable Long id,
+                                          @RequestParam ApplicationStatus status) {
+
+        applicationService.updateStatus(id, status);
         return "redirect:/recruiter/job/view";
     }
 }

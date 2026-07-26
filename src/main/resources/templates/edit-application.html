@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Update Application Status</title>
+</head>
+
+<body>
+
+<h2>Update Application Status</h2>
+
+<p>
+    <strong>Applicant:</strong>
+    <span th:text="${app.user.name}"></span>
+</p>
+
+<p>
+    <strong>Job:</strong>
+    <span th:text="${app.job.title}"></span>
+</p>
+
+<form th:action="@{/recruiter/job/application/edit/{id}(id=${app.id})}"
+      method="post">
+
+    <label>Status:</label>
+
+    <select name="status">
+
+        <option th:each="status : ${statuses}"
+                th:value="${status}"
+                th:text="${status}"
+                th:selected="${status == app.status}">
+        </option>
+
+    </select>
+
+    <br><br>
+
+    <button type="submit">Update Status</button>
+
+</form>
+
+</body>
+
+</html>

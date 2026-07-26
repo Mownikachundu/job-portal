@@ -26,16 +26,22 @@
 
         <td th:text="${app.status}"></td>
 
-        <td th:text="${#temporals.format(app.appliedDate, 'dd MMM yyyy, hh:mm a')}"></td>
+        <td th:text="${#temporals.format(app.appliedDate, 'dd-MM-yyyy HH:mm')}"></td>
 
     </tr>
+
 </table>
 
-<br>
+<br><br>
 
 <a th:href="@{/jobseeker/jobs}">
-    Back to Jobs
+    <button>Browse Jobs</button>
+</a>
+
+<a th:href="@{/jobseeker/dashboard}">
+    <button>Dashboard</button>
 </a>
 
 </body>
+
 </html>

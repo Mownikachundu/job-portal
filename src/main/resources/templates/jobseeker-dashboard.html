@@ -1,13 +1,33 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Job Seeker Dashboard</title>
 </head>
-
 <body>
 
-<h2>Welcome <span th:text="${name}"></span>!</h2>
+<h2>Job Seeker Dashboard</h2>
+
+<h3>
+    Welcome,
+    <span th:text="${name}"></span>
+</h3>
+<hr>
+
+<h3>Jobs</h3>
+
+<a th:href="@{/jobseeker/jobs}">
+    <button>Browse Jobs</button>
+</a>
+
+<br><br>
+
+<h3>Applications</h3>
+
+<a th:href="@{/jobseeker/applications}">
+    <button>My Applications</button>
+</a>
+
+<br><br>
 
 <form th:action="@{/logout}" method="post">
     <button type="submit">Logout</button>
