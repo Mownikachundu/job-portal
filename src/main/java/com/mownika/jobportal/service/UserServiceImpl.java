@@ -1,7 +1,6 @@
 package com.mownika.jobportal.service;
 
 import com.mownika.jobportal.dto.RegisterUserDto;
-import com.mownika.jobportal.entity.JobSeekerProfile;
 import com.mownika.jobportal.entity.RecruiterProfile;
 import com.mownika.jobportal.entity.Role;
 import com.mownika.jobportal.entity.User;
@@ -79,14 +78,7 @@ public class UserServiceImpl implements UserService {
             recruiterProfile.setUser(user);
 
             recruiterProfileRepository.save(recruiterProfile);
-
-        } else {
-
-            JobSeekerProfile jobSeekerProfile = new JobSeekerProfile();
-
-            jobSeekerProfile.setUser(user);
-
-            jobSeekerProfileRepository.save(jobSeekerProfile);
         }
     }
 }
+

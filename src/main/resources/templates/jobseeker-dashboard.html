@@ -1,17 +1,32 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <title>Job Seeker Dashboard</title>
 </head>
+
 <body>
 
-<h2>Job Seeker Dashboard</h2>
+<h1>Job Seeker Dashboard</h1>
 
-<h3>
+<h2>
     Welcome,
     <span th:text="${name}"></span>
-</h3>
+</h2>
+
 <hr>
+
+<h3>Profile</h3>
+
+<a th:href="@{/jobseeker/profile/view}">
+    <button>View Profile</button>
+</a>
+
+<a th:href="@{/jobseeker/profile/edit}">
+    <button>Edit Profile</button>
+</a>
+
+<br><br>
 
 <h3>Jobs</h3>
 

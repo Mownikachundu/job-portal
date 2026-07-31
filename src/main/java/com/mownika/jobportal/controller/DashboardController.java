@@ -1,5 +1,6 @@
 package com.mownika.jobportal.controller;
 
+import com.mownika.jobportal.service.JobSeekerProfileService;
 import com.mownika.jobportal.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,9 +12,12 @@ import java.security.Principal;
 public class DashboardController {
 
     private final UserService userService;
+    private final JobSeekerProfileService jobSeekerProfileService;
 
-    public DashboardController(UserService userService) {
+    public DashboardController(UserService userService,
+                               JobSeekerProfileService jobSeekerProfileService) {
         this.userService = userService;
+        this.jobSeekerProfileService = jobSeekerProfileService;
     }
 
     @GetMapping("/recruiter/dashboard")
@@ -32,6 +36,11 @@ public class DashboardController {
                                      Principal principal) {
 
         String email = principal.getName();
+
+        if (!jobSeekerProfileService.profileExists(email)) {
+            return "redirect:/jobseeker/profile/create";
+        }
+
         String name = userService.getUserNameByEmail(email);
         model.addAttribute("name", name);
 

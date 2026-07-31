@@ -23,7 +23,7 @@ public class JobSeekerProfileController {
 
         model.addAttribute("profile", new JobSeekerProfileDto());
 
-        return "create-profile";
+        return "create-jobseeker-profile";
     }
 
     @PostMapping("/create")
@@ -47,7 +47,7 @@ public class JobSeekerProfileController {
 
         model.addAttribute("profile", profile);
 
-        return "view-profile";
+        return "view-jobseeker-profile";
     }
 
     @GetMapping("/edit")
@@ -60,7 +60,7 @@ public class JobSeekerProfileController {
 
         model.addAttribute("profile", profile);
 
-        return "edit-profile";
+        return "edit-jobseeker-profile";
     }
 
     @PostMapping("/edit")

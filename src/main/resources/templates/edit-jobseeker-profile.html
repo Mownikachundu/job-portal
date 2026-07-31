@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Edit Profile</title>
+</head>
+
+<body>
+
+<h2>Edit Profile</h2>
+
+<form th:action="@{/jobseeker/profile/edit}"
+      th:object="${profile}"
+      method="post">
+
+    <p>
+        <label>Phone</label><br>
+        <input type="text" th:field="*{phone}">
+    </p>
+
+    <p>
+        <label>Address</label><br>
+        <input type="text" th:field="*{address}">
+    </p>
+
+    <p>
+        <label>Skills</label><br>
+        <textarea th:field="*{skills}"></textarea>
+    </p>
+
+    <p>
+        <label>Education</label><br>
+        <input type="text" th:field="*{education}">
+    </p>
+
+    <p>
+        <label>Experience</label><br>
+        <input type="text" th:field="*{experience}">
+    </p>
+
+    <p>
+        <label>Resume URL</label><br>
+        <input type="text" th:field="*{resumeUrl}">
+    </p>
+
+    <br>
+
+    <button type="submit">
+        Update Profile
+    </button>
+
+</form>
+
+<br>
+
+<a th:href="@{/jobseeker/profile/view}">
+    <button>Cancel</button>
+</a>
+
+</body>
+</html>

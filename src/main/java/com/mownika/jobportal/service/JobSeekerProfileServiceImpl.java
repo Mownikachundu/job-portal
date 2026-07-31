@@ -34,6 +34,10 @@ public class JobSeekerProfileServiceImpl implements JobSeekerProfileService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
+        if (jobSeekerProfileRepository.findByUser(user).isPresent()) {
+            throw new RuntimeException("Profile already exists");
+        }
+
         JobSeekerProfile profile = new JobSeekerProfile();
 
         profile.setUser(user);
