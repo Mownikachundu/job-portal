@@ -1,10 +1,12 @@
-# Job Portal Application
+Tech Stack:
 
-Spring Boot based Job Portal supporting:
+Java, Spring Boot, Spring Security, JWT Authentication,
+Spring Data JPA, Hibernate, MySQL, Docker, REST APIs
 
-- JWT Authentication
-- Role Based Access Control
-- Job Seeker & Recruiter Workflows
-- REST APIs
-- MySQL Database
-- Docker Support
+Features:
+• User Authentication & Authorization
+• JWT-based Security
+• Job Seeker & Recruiter Workflows
+• Job Posting & Application Tracking
+• RESTful APIs
+• Docker Support
