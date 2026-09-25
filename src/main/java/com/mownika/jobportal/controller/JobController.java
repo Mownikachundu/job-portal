@@ -79,17 +79,23 @@ public class JobController {
 
     @PostMapping("/edit/{id}")
     public String updateJob(@PathVariable Long id,
-                            @ModelAttribute JobDto jobDto) {
+                            @ModelAttribute JobDto jobDto,
+                            Principal principal) {
 
-        jobService.updateJob(id, jobDto);
+        String email = principal.getName();
+
+        jobService.updateJob(id, jobDto, email);
 
         return "redirect:/recruiter/job/view";
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteJob(@PathVariable Long id) {
+    public String deleteJob(@PathVariable Long id,
+                            Principal principal) {
 
-        jobService.deleteJob(id);
+        String email = principal.getName();
+
+        jobService.deleteJob(id, email);
 
         return "redirect:/recruiter/job/view";
     }
@@ -107,10 +113,13 @@ public class JobController {
     }
 
     @PostMapping("/application/edit/{id}")
-    public String updateApplicationStatus(@PathVariable Long id,
-                                          @RequestParam ApplicationStatus status) {
+    public String updateApplicationStatus(
+            @PathVariable Long id,
+            @RequestParam ApplicationStatus status,
+            Principal principal) {
 
-        applicationService.updateStatus(id, status);
+        String email = principal.getName();
+        applicationService.updateStatus(id, status, email);
         return "redirect:/recruiter/job/view";
     }
 }

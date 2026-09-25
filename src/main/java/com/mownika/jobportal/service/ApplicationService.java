@@ -11,10 +11,11 @@ public interface ApplicationService {
 
     List<Application> getMyApplications(String email);
 
-    List<Application> getApplicants(Long jobId);
+    List<Application> getApplicants(Long jobId, String email);
 
     Application getApplicationById(Long id);
 
-    void updateStatus(Long applicationId, ApplicationStatus status);
-
+    void updateStatus(Long applicationId,
+                      ApplicationStatus status,
+                      String email);
 }

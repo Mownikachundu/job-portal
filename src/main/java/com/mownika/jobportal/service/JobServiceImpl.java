@@ -95,11 +95,26 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public void updateJob(Long id, JobDto jobDto) {
+    public void updateJob(Long id, JobDto jobDto, String email) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new RuntimeException("User not found"));
+
+        RecruiterProfile recruiterProfile =
+                recruiterProfileRepository.findByUser(user)
+                        .orElseThrow(() ->
+                                new RuntimeException("Recruiter not found"));
+
+        Company company = recruiterProfile.getCompany();
 
         Job job = jobRepository.findById(id)
                 .orElseThrow(() ->
                         new RuntimeException("Job not found"));
+
+        if (!job.getCompany().getId().equals(company.getId())) {
+            throw new RuntimeException("You are not allowed to update this job");
+        }
 
         job.setTitle(jobDto.getTitle());
         job.setDescription(jobDto.getDescription());
@@ -111,11 +126,26 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public void deleteJob(Long id) {
+    public void deleteJob(Long id, String email) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new RuntimeException("User not found"));
+
+        RecruiterProfile recruiterProfile =
+                recruiterProfileRepository.findByUser(user)
+                        .orElseThrow(() ->
+                                new RuntimeException("Recruiter not found"));
+
+        Company company = recruiterProfile.getCompany();
 
         Job job = jobRepository.findById(id)
                 .orElseThrow(() ->
                         new RuntimeException("Job not found"));
+
+        if (!job.getCompany().getId().equals(company.getId())) {
+            throw new RuntimeException("You are not allowed to delete this job");
+        }
 
         jobRepository.delete(job);
     }
@@ -132,6 +162,4 @@ public class JobServiceImpl implements JobService {
                 .orElseThrow(() ->
                         new RuntimeException("Job not found"));
     }
-
-
 }

@@ -10,26 +10,23 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 public class SecurityConfig {
 
     private final CustomUserDetailsService customUserDetailsService;
     private final CustomAuthenticationSuccessHandler successHandler;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     public SecurityConfig(
             CustomUserDetailsService customUserDetailsService,
-            CustomAuthenticationSuccessHandler successHandler) {
+            CustomAuthenticationSuccessHandler successHandler,
+            JwtAuthenticationFilter jwtAuthenticationFilter) {
 
         this.customUserDetailsService = customUserDetailsService;
         this.successHandler = successHandler;
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManager(
-            AuthenticationConfiguration configuration) throws Exception {
-
-        return configuration.getAuthenticationManager();
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
     @Bean
@@ -44,21 +41,48 @@ public class SecurityConfig {
                 new DaoAuthenticationProvider(customUserDetailsService);
 
         provider.setPasswordEncoder(passwordEncoder());
+
         return provider;
     }
 
+    @Bean
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration configuration)
+            throws Exception {
+
+        return configuration.getAuthenticationManager();
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http)
             throws Exception {
 
-        http.authenticationProvider(authenticationProvider())
+        http
+                .authenticationProvider(authenticationProvider())
+
                 .csrf(csrf -> csrf
                         .ignoringRequestMatchers("/api/**")
                 )
+
                 .authorizeHttpRequests(auth -> auth
 
-                        .requestMatchers("/register", "/login", "/api/auth/**").permitAll()
+                        .requestMatchers(
+                                "/register",
+                                "/login",
+                                "/api/auth/**"
+                        ).permitAll()
+
+                        .requestMatchers("/api/test/**")
+                        .authenticated()
+
+                        .requestMatchers("/api/jobseeker/**")
+                        .hasAuthority("JOB_SEEKER")
+
+                        .requestMatchers("/api/recruiter/**")
+                        .hasAuthority("RECRUITER")
+
+                        .requestMatchers("/api/jobs/**")
+                        .authenticated()
 
                         .requestMatchers("/jobseeker/**")
                         .hasAuthority("JOB_SEEKER")
@@ -70,16 +94,22 @@ public class SecurityConfig {
                 )
 
                 .formLogin(form -> form
-                .loginPage("/login")
-                .loginProcessingUrl("/login")
-                .successHandler(successHandler)
-                .failureUrl("/login?error=true")
-                .permitAll()
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .successHandler(successHandler)
+                        .failureUrl("/login?error=true")
+                        .permitAll()
                 )
+
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout")
                         .permitAll()
+                )
+
+                .addFilterBefore(
+                        jwtAuthenticationFilter,
+                        UsernamePasswordAuthenticationFilter.class
                 );
 
         return http.build();

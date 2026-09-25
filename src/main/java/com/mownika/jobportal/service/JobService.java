@@ -11,8 +11,7 @@ public interface JobService {
     List<Job> getCompanyJobs(String email);
     Job getJobById(Long id);
     JobDto getJobForEdit(Long id);
-    void updateJob(Long id, JobDto jobDto);
-    void deleteJob(Long id);
+    void updateJob(Long id, JobDto jobDto, String email);
+    void deleteJob(Long id, String email);
     List<Job> getAllJobs();
-
 }

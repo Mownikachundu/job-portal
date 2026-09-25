@@ -9,5 +9,4 @@ public interface CompanyService {
     Company getCompanyByRecruiter(String email);
     CompanyDto getCompanyForEdit(String email);
     void updateCompany(CompanyDto companyDto, String email);
-
 }

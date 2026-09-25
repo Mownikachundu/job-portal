@@ -67,5 +67,4 @@ public class CompanyController {
 
         return "redirect:/recruiter/company/view";
     }
-
 }

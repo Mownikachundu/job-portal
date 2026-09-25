@@ -59,25 +59,17 @@ public class JobSeekerController {
     }
 
     @GetMapping("/applications")
-    public String myApplications(Model model,
-                                 Principal principal) {
+    public String viewApplications(
+            Model model,
+            Principal principal) {
 
         String email = principal.getName();
-        List<Application> applications = applicationService.getMyApplications(email);
+
+        List<Application> applications =
+                applicationService.getMyApplications(email);
+
         model.addAttribute("applications", applications);
 
         return "my-applications";
-    }
-
-    @GetMapping("/applicants/{jobId}")
-    public String viewApplicants(@PathVariable Long jobId,
-                                 Model model) {
-
-        List<Application> applications =
-                applicationService.getApplicants(jobId);
-
-        model.addAttribute("applications", applications);
-
-        return "view-applicants";
     }
 }
