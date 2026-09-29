@@ -1,6 +1,12 @@
 package com.mownika.jobportal.service;
 
-import com.mownika.jobportal.entity.*;
+import com.mownika.jobportal.entity.Application;
+import com.mownika.jobportal.entity.ApplicationStatus;
+import com.mownika.jobportal.entity.Job;
+import com.mownika.jobportal.entity.RecruiterProfile;
+import com.mownika.jobportal.entity.User;
+import com.mownika.jobportal.exception.BadRequestException;
+import com.mownika.jobportal.exception.ResourceNotFoundException;
 import com.mownika.jobportal.repository.ApplicationRepository;
 import com.mownika.jobportal.repository.JobRepository;
 import com.mownika.jobportal.repository.RecruiterProfileRepository;
@@ -29,59 +35,78 @@ public class ApplicationServiceImpl implements ApplicationService {
         this.userRepository = userRepository;
         this.recruiterProfileRepository = recruiterProfileRepository;
     }
+
     @Override
     public void applyForJob(Long jobId, String email) {
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() ->
-                        new RuntimeException("User not found"));
+                        new ResourceNotFoundException(
+                                "User not found"));
 
         Job job = jobRepository.findById(jobId)
                 .orElseThrow(() ->
-                        new RuntimeException("Job not found"));
+                        new ResourceNotFoundException(
+                                "Job not found"));
 
-        if (applicationRepository.existsByJobAndUser(job, user)) {
-            throw new RuntimeException("You have already applied for this job");
+        if (applicationRepository
+                .existsByJobAndUser(job, user)) {
+
+            throw new BadRequestException(
+                    "You have already applied for this job");
         }
 
-        Application application = new Application();
+        Application application =
+                new Application();
 
         application.setJob(job);
         application.setUser(user);
-        application.setStatus(ApplicationStatus.APPLIED);
-        application.setAppliedDate(LocalDateTime.now());
+        application.setStatus(
+                ApplicationStatus.APPLIED);
+        application.setAppliedDate(
+                LocalDateTime.now());
 
         applicationRepository.save(application);
     }
 
     @Override
-    public List<Application> getMyApplications(String email) {
+    public List<Application> getMyApplications(
+            String email) {
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() ->
-                        new RuntimeException("User not found"));
+                        new ResourceNotFoundException(
+                                "User not found"));
 
-        return applicationRepository.findByUser(user);
+        return applicationRepository
+                .findByUser(user);
     }
 
     @Override
-    public List<Application> getApplicants(Long jobId, String email) {
+    public List<Application> getApplicants(
+            Long jobId,
+            String email) {
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() ->
-                        new RuntimeException("User not found"));
+                        new ResourceNotFoundException(
+                                "User not found"));
 
         RecruiterProfile recruiterProfile =
-                recruiterProfileRepository.findByUser(user)
+                recruiterProfileRepository
+                        .findByUser(user)
                         .orElseThrow(() ->
-                                new RuntimeException("Recruiter not found"));
+                                new ResourceNotFoundException(
+                                        "Recruiter not found"));
 
         Job job = jobRepository.findById(jobId)
                 .orElseThrow(() ->
-                        new RuntimeException("Job not found"));
+                        new ResourceNotFoundException(
+                                "Job not found"));
 
         if (!job.getCompany().getId()
-                .equals(recruiterProfile.getCompany().getId())) {
+                .equals(recruiterProfile
+                        .getCompany().getId())) {
 
             throw new RuntimeException(
                     "You are not allowed to view applicants for this job");
@@ -95,30 +120,41 @@ public class ApplicationServiceImpl implements ApplicationService {
 
         return applicationRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Application not found"));
+                        new ResourceNotFoundException(
+                                "Application not found"));
     }
 
     @Override
-    public void updateStatus(Long applicationId,
-                             ApplicationStatus status,
-                             String email) {
+    public void updateStatus(
+            Long applicationId,
+            ApplicationStatus status,
+            String email) {
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() ->
-                        new RuntimeException("User not found"));
+                        new ResourceNotFoundException(
+                                "User not found"));
 
         RecruiterProfile recruiterProfile =
-                recruiterProfileRepository.findByUser(user)
+                recruiterProfileRepository
+                        .findByUser(user)
                         .orElseThrow(() ->
-                                new RuntimeException("Recruiter not found"));
+                                new ResourceNotFoundException(
+                                        "Recruiter not found"));
 
         Application application =
-                applicationRepository.findById(applicationId)
+                applicationRepository
+                        .findById(applicationId)
                         .orElseThrow(() ->
-                                new RuntimeException("Application not found"));
+                                new ResourceNotFoundException(
+                                        "Application not found"));
 
-        if (!application.getJob().getCompany().getId()
-                .equals(recruiterProfile.getCompany().getId())) {
+        if (!application.getJob()
+                .getCompany()
+                .getId()
+                .equals(recruiterProfile
+                        .getCompany()
+                        .getId())) {
 
             throw new RuntimeException(
                     "You are not allowed to update this application");

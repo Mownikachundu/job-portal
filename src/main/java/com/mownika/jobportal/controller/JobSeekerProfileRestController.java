@@ -4,6 +4,7 @@ import com.mownika.jobportal.dto.JobSeekerProfileDto;
 import com.mownika.jobportal.dto.JobSeekerProfileResponseDto;
 import com.mownika.jobportal.entity.JobSeekerProfile;
 import com.mownika.jobportal.service.JobSeekerProfileService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ public class JobSeekerProfileRestController {
 
     @PostMapping
     public ResponseEntity<String> createProfile(
-            @RequestBody JobSeekerProfileDto profileDto,
+            @Valid @RequestBody JobSeekerProfileDto profileDto,
             Principal principal) {
 
         String email = principal.getName();
@@ -61,7 +62,7 @@ public class JobSeekerProfileRestController {
 
     @PutMapping
     public ResponseEntity<String> updateProfile(
-            @RequestBody JobSeekerProfileDto profileDto,
+            @Valid @RequestBody JobSeekerProfileDto profileDto,
             Principal principal) {
 
         String email = principal.getName();

@@ -3,18 +3,23 @@ package com.mownika.jobportal.service;
 import com.mownika.jobportal.dto.JobSeekerProfileDto;
 import com.mownika.jobportal.entity.JobSeekerProfile;
 import com.mownika.jobportal.entity.User;
+import com.mownika.jobportal.exception.BadRequestException;
+import com.mownika.jobportal.exception.ResourceNotFoundException;
 import com.mownika.jobportal.repository.JobSeekerProfileRepository;
 import com.mownika.jobportal.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class JobSeekerProfileServiceImpl implements JobSeekerProfileService {
+public class JobSeekerProfileServiceImpl
+        implements JobSeekerProfileService {
 
     private final JobSeekerProfileRepository jobSeekerProfileRepository;
     private final UserRepository userRepository;
 
-    public JobSeekerProfileServiceImpl(JobSeekerProfileRepository jobSeekerProfileRepository,
-                                       UserRepository userRepository) {
+    public JobSeekerProfileServiceImpl(
+            JobSeekerProfileRepository jobSeekerProfileRepository,
+            UserRepository userRepository) {
+
         this.jobSeekerProfileRepository = jobSeekerProfileRepository;
         this.userRepository = userRepository;
     }
@@ -23,22 +28,35 @@ public class JobSeekerProfileServiceImpl implements JobSeekerProfileService {
     public boolean profileExists(String email) {
 
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "User not found"));
 
-        return jobSeekerProfileRepository.findByUser(user).isPresent();
+        return jobSeekerProfileRepository
+                .findByUser(user)
+                .isPresent();
     }
 
     @Override
-    public void createProfile(JobSeekerProfileDto dto, String email) {
+    public void createProfile(
+            JobSeekerProfileDto dto,
+            String email) {
 
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "User not found"));
 
-        if (jobSeekerProfileRepository.findByUser(user).isPresent()) {
-            throw new RuntimeException("Profile already exists");
+        if (jobSeekerProfileRepository
+                .findByUser(user)
+                .isPresent()) {
+
+            throw new BadRequestException(
+                    "Profile already exists");
         }
 
-        JobSeekerProfile profile = new JobSeekerProfile();
+        JobSeekerProfile profile =
+                new JobSeekerProfile();
 
         profile.setUser(user);
         profile.setPhone(dto.getPhone());
@@ -55,20 +73,33 @@ public class JobSeekerProfileServiceImpl implements JobSeekerProfileService {
     public JobSeekerProfile getProfile(String email) {
 
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "User not found"));
 
-        return jobSeekerProfileRepository.findByUser(user)
-                .orElseThrow(() -> new RuntimeException("Profile not found"));
+        return jobSeekerProfileRepository
+                .findByUser(user)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Profile not found"));
     }
 
     @Override
-    public void updateProfile(JobSeekerProfileDto dto, String email) {
+    public void updateProfile(
+            JobSeekerProfileDto dto,
+            String email) {
 
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "User not found"));
 
-        JobSeekerProfile profile = jobSeekerProfileRepository.findByUser(user)
-                .orElseThrow(() -> new RuntimeException("Profile not found"));
+        JobSeekerProfile profile =
+                jobSeekerProfileRepository
+                        .findByUser(user)
+                        .orElseThrow(() ->
+                                new ResourceNotFoundException(
+                                        "Profile not found"));
 
         profile.setPhone(dto.getPhone());
         profile.setAddress(dto.getAddress());

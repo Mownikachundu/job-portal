@@ -4,6 +4,8 @@ import com.mownika.jobportal.dto.CompanyDto;
 import com.mownika.jobportal.entity.Company;
 import com.mownika.jobportal.entity.RecruiterProfile;
 import com.mownika.jobportal.entity.User;
+import com.mownika.jobportal.exception.BadRequestException;
+import com.mownika.jobportal.exception.ResourceNotFoundException;
 import com.mownika.jobportal.repository.CompanyRepository;
 import com.mownika.jobportal.repository.RecruiterProfileRepository;
 import com.mownika.jobportal.repository.UserRepository;
@@ -16,9 +18,10 @@ public class CompanyServiceImpl implements CompanyService {
     private final UserRepository userRepository;
     private final RecruiterProfileRepository recruiterProfileRepository;
 
-    public CompanyServiceImpl(CompanyRepository companyRepository,
-                              UserRepository userRepository,
-                              RecruiterProfileRepository recruiterProfileRepository) {
+    public CompanyServiceImpl(
+            CompanyRepository companyRepository,
+            UserRepository userRepository,
+            RecruiterProfileRepository recruiterProfileRepository) {
 
         this.companyRepository = companyRepository;
         this.userRepository = userRepository;
@@ -26,19 +29,27 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public void createCompany(CompanyDto companyDto, String email) {
+    public void createCompany(
+            CompanyDto companyDto,
+            String email) {
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() ->
-                        new RuntimeException("User not found"));
+                        new ResourceNotFoundException(
+                                "User not found"));
 
         RecruiterProfile recruiter =
-                recruiterProfileRepository.findByUser(user)
+                recruiterProfileRepository
+                        .findByUser(user)
                         .orElseThrow(() ->
-                                new RuntimeException("Recruiter profile not found"));
+                                new ResourceNotFoundException(
+                                        "Recruiter profile not found"));
 
-        if (companyRepository.existsByName(companyDto.getName())) {
-            throw new RuntimeException("Company already exists");
+        if (companyRepository
+                .existsByName(companyDto.getName())) {
+
+            throw new BadRequestException(
+                    "Company already exists");
         }
 
         Company company = new Company();
@@ -49,6 +60,7 @@ public class CompanyServiceImpl implements CompanyService {
         company.setIndustry(companyDto.getIndustry());
 
         company.setOwner(recruiter);
+
         companyRepository.save(company);
 
         recruiter.setCompany(company);
@@ -56,31 +68,39 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public Company getCompanyByRecruiter(String email) {
+    public Company getCompanyByRecruiter(
+            String email) {
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() ->
-                        new RuntimeException("User not found"));
+                        new ResourceNotFoundException(
+                                "User not found"));
 
         RecruiterProfile recruiterProfile =
-                recruiterProfileRepository.findByUser(user)
+                recruiterProfileRepository
+                        .findByUser(user)
                         .orElseThrow(() ->
-                                new RuntimeException("Recruiter profile not found"));
+                                new ResourceNotFoundException(
+                                        "Recruiter profile not found"));
 
         return recruiterProfile.getCompany();
     }
 
     @Override
-    public CompanyDto getCompanyForEdit(String email) {
+    public CompanyDto getCompanyForEdit(
+            String email) {
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() ->
-                        new RuntimeException("User not found"));
+                        new ResourceNotFoundException(
+                                "User not found"));
 
         RecruiterProfile recruiterProfile =
-                recruiterProfileRepository.findByUser(user)
+                recruiterProfileRepository
+                        .findByUser(user)
                         .orElseThrow(() ->
-                                new RuntimeException("Recruiter profile not found"));
+                                new ResourceNotFoundException(
+                                        "Recruiter profile not found"));
 
         Company company = recruiterProfile.getCompany();
 
@@ -95,16 +115,21 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public void updateCompany(CompanyDto companyDto, String email) {
+    public void updateCompany(
+            CompanyDto companyDto,
+            String email) {
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() ->
-                        new RuntimeException("User not found"));
+                        new ResourceNotFoundException(
+                                "User not found"));
 
         RecruiterProfile recruiterProfile =
-                recruiterProfileRepository.findByUser(user)
+                recruiterProfileRepository
+                        .findByUser(user)
                         .orElseThrow(() ->
-                                new RuntimeException("Recruiter profile not found"));
+                                new ResourceNotFoundException(
+                                        "Recruiter profile not found"));
 
         Company company = recruiterProfile.getCompany();
 

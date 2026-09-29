@@ -4,6 +4,7 @@ import com.mownika.jobportal.dto.LoginDto;
 import com.mownika.jobportal.dto.RegisterUserDto;
 import com.mownika.jobportal.service.JwtService;
 import com.mownika.jobportal.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -35,10 +36,9 @@ public class AuthRestController {
 
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(
-            @RequestBody RegisterUserDto dto) {
+            @Valid @RequestBody RegisterUserDto dto) {
 
         userService.registerUser(dto);
-
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body("User registered successfully");
@@ -46,7 +46,7 @@ public class AuthRestController {
 
     @PostMapping("/login")
     public ResponseEntity<String> login(
-            @RequestBody LoginDto dto) {
+            @Valid @RequestBody LoginDto dto) {
 
         Authentication authentication =
                 authenticationManager.authenticate(
@@ -60,7 +60,6 @@ public class AuthRestController {
                 (UserDetails) authentication.getPrincipal();
 
         String token = jwtService.generateToken(userDetails);
-
         return ResponseEntity.ok(token);
     }
 }

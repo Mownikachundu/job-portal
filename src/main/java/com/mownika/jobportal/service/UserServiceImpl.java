@@ -4,6 +4,7 @@ import com.mownika.jobportal.dto.RegisterUserDto;
 import com.mownika.jobportal.entity.RecruiterProfile;
 import com.mownika.jobportal.entity.Role;
 import com.mownika.jobportal.entity.User;
+import com.mownika.jobportal.exception.BadRequestException;
 import com.mownika.jobportal.repository.JobSeekerProfileRepository;
 import com.mownika.jobportal.repository.RecruiterProfileRepository;
 import com.mownika.jobportal.repository.UserRepository;
@@ -20,11 +21,11 @@ public class UserServiceImpl implements UserService {
     private final JobSeekerProfileRepository jobSeekerProfileRepository;
     private final PasswordEncoder passwordEncoder;
 
-
-    public UserServiceImpl(UserRepository userRepository,
-                           RecruiterProfileRepository recruiterProfileRepository,
-                           JobSeekerProfileRepository jobSeekerProfileRepository,
-                           PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(
+            UserRepository userRepository,
+            RecruiterProfileRepository recruiterProfileRepository,
+            JobSeekerProfileRepository jobSeekerProfileRepository,
+            PasswordEncoder passwordEncoder) {
 
         this.userRepository = userRepository;
         this.recruiterProfileRepository = recruiterProfileRepository;
@@ -43,22 +44,28 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void registerUser(RegisterUserDto registerUserDto) {
+    public void registerUser(
+            RegisterUserDto registerUserDto) {
 
         Optional<User> existingUser =
-                userRepository.findByEmail(registerUserDto.getEmail());
+                userRepository.findByEmail(
+                        registerUserDto.getEmail());
 
         if (existingUser.isPresent()) {
-            throw new RuntimeException("Email already exists.");
+            throw new BadRequestException(
+                    "Email already exists.");
         }
 
         if (!registerUserDto.getPassword()
                 .equals(registerUserDto.getConfirmPassword())) {
-            throw new RuntimeException("Passwords do not match.");
+
+            throw new BadRequestException(
+                    "Passwords do not match.");
         }
 
         String encryptedPassword =
-                passwordEncoder.encode(registerUserDto.getPassword());
+                passwordEncoder.encode(
+                        registerUserDto.getPassword());
 
         User user = new User();
 
@@ -71,12 +78,13 @@ public class UserServiceImpl implements UserService {
 
         if (user.getRole() == Role.RECRUITER) {
 
-            RecruiterProfile recruiterProfile = new RecruiterProfile();
+            RecruiterProfile recruiterProfile =
+                    new RecruiterProfile();
 
             recruiterProfile.setUser(user);
 
-            recruiterProfileRepository.save(recruiterProfile);
+            recruiterProfileRepository.save(
+                    recruiterProfile);
         }
     }
 }
-

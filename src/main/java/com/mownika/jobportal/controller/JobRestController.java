@@ -4,6 +4,7 @@ import com.mownika.jobportal.dto.JobDto;
 import com.mownika.jobportal.dto.JobResponseDto;
 import com.mownika.jobportal.entity.Job;
 import com.mownika.jobportal.service.JobService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,7 @@ public class JobRestController {
 
     @PostMapping("/recruiter/jobs")
     public ResponseEntity<String> createJob(
-            @RequestBody JobDto jobDto,
+            @Valid @RequestBody JobDto jobDto,
             Principal principal) {
 
         String email = principal.getName();
@@ -74,7 +75,7 @@ public class JobRestController {
     @PutMapping("/recruiter/jobs/{id}")
     public ResponseEntity<String> updateJob(
             @PathVariable Long id,
-            @RequestBody JobDto jobDto,
+            @Valid @RequestBody JobDto jobDto,
             Principal principal) {
 
         String email = principal.getName();
