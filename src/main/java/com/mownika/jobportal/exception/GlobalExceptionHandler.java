@@ -56,4 +56,17 @@ public class GlobalExceptionHandler {
                 .badRequest()
                 .body(error);
     }
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<Map<String, String>> handleForbidden(
+            ForbiddenException ex) {
+
+        Map<String, String> error = new HashMap<>();
+
+        error.put("error", ex.getMessage());
+
+        return ResponseEntity
+                .status(403)
+                .body(error);
+    }
 }

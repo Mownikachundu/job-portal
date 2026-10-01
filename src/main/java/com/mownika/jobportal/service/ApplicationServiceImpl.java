@@ -6,6 +6,7 @@ import com.mownika.jobportal.entity.Job;
 import com.mownika.jobportal.entity.RecruiterProfile;
 import com.mownika.jobportal.entity.User;
 import com.mownika.jobportal.exception.BadRequestException;
+import com.mownika.jobportal.exception.ForbiddenException;
 import com.mownika.jobportal.exception.ResourceNotFoundException;
 import com.mownika.jobportal.repository.ApplicationRepository;
 import com.mownika.jobportal.repository.JobRepository;
@@ -17,7 +18,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-public class ApplicationServiceImpl implements ApplicationService {
+public class ApplicationServiceImpl
+        implements ApplicationService {
 
     private final ApplicationRepository applicationRepository;
     private final JobRepository jobRepository;
@@ -33,11 +35,14 @@ public class ApplicationServiceImpl implements ApplicationService {
         this.applicationRepository = applicationRepository;
         this.jobRepository = jobRepository;
         this.userRepository = userRepository;
-        this.recruiterProfileRepository = recruiterProfileRepository;
+        this.recruiterProfileRepository =
+                recruiterProfileRepository;
     }
 
     @Override
-    public void applyForJob(Long jobId, String email) {
+    public void applyForJob(
+            Long jobId,
+            String email) {
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() ->
@@ -78,8 +83,7 @@ public class ApplicationServiceImpl implements ApplicationService {
                         new ResourceNotFoundException(
                                 "User not found"));
 
-        return applicationRepository
-                .findByUser(user);
+        return applicationRepository.findByUser(user);
     }
 
     @Override
@@ -93,8 +97,7 @@ public class ApplicationServiceImpl implements ApplicationService {
                                 "User not found"));
 
         RecruiterProfile recruiterProfile =
-                recruiterProfileRepository
-                        .findByUser(user)
+                recruiterProfileRepository.findByUser(user)
                         .orElseThrow(() ->
                                 new ResourceNotFoundException(
                                         "Recruiter not found"));
@@ -106,9 +109,10 @@ public class ApplicationServiceImpl implements ApplicationService {
 
         if (!job.getCompany().getId()
                 .equals(recruiterProfile
-                        .getCompany().getId())) {
+                        .getCompany()
+                        .getId())) {
 
-            throw new RuntimeException(
+            throw new ForbiddenException(
                     "You are not allowed to view applicants for this job");
         }
 
@@ -116,7 +120,8 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public Application getApplicationById(Long id) {
+    public Application getApplicationById(
+            Long id) {
 
         return applicationRepository.findById(id)
                 .orElseThrow(() ->
@@ -136,8 +141,7 @@ public class ApplicationServiceImpl implements ApplicationService {
                                 "User not found"));
 
         RecruiterProfile recruiterProfile =
-                recruiterProfileRepository
-                        .findByUser(user)
+                recruiterProfileRepository.findByUser(user)
                         .orElseThrow(() ->
                                 new ResourceNotFoundException(
                                         "Recruiter not found"));
@@ -156,7 +160,7 @@ public class ApplicationServiceImpl implements ApplicationService {
                         .getCompany()
                         .getId())) {
 
-            throw new RuntimeException(
+            throw new ForbiddenException(
                     "You are not allowed to update this application");
         }
 

@@ -5,6 +5,7 @@ import com.mownika.jobportal.entity.Company;
 import com.mownika.jobportal.entity.Job;
 import com.mownika.jobportal.entity.RecruiterProfile;
 import com.mownika.jobportal.entity.User;
+import com.mownika.jobportal.exception.ForbiddenException;
 import com.mownika.jobportal.exception.ResourceNotFoundException;
 import com.mownika.jobportal.repository.ApplicationRepository;
 import com.mownika.jobportal.repository.JobRepository;
@@ -36,16 +37,20 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public void createJob(JobDto jobDto, String email) {
+    public void createJob(
+            JobDto jobDto,
+            String email) {
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("User not found"));
+                        new ResourceNotFoundException(
+                                "User not found"));
 
         RecruiterProfile recruiterProfile =
                 recruiterProfileRepository.findByUser(user)
                         .orElseThrow(() ->
-                                new ResourceNotFoundException("Recruiter not found"));
+                                new ResourceNotFoundException(
+                                        "Recruiter not found"));
 
         Company company = recruiterProfile.getCompany();
 
@@ -55,7 +60,8 @@ public class JobServiceImpl implements JobService {
         job.setDescription(jobDto.getDescription());
         job.setSalary(jobDto.getSalary());
         job.setLocation(jobDto.getLocation());
-        job.setExperienceRequired(jobDto.getExperienceRequired());
+        job.setExperienceRequired(
+                jobDto.getExperienceRequired());
 
         job.setCompany(company);
         job.setRecruiter(recruiterProfile);
@@ -69,12 +75,14 @@ public class JobServiceImpl implements JobService {
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("User not found"));
+                        new ResourceNotFoundException(
+                                "User not found"));
 
         RecruiterProfile recruiterProfile =
                 recruiterProfileRepository.findByUser(user)
                         .orElseThrow(() ->
-                                new ResourceNotFoundException("Recruiter not found"));
+                                new ResourceNotFoundException(
+                                        "Recruiter not found"));
 
         Company company = recruiterProfile.getCompany();
 
@@ -86,7 +94,8 @@ public class JobServiceImpl implements JobService {
 
         Job job = jobRepository.findById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("Job not found"));
+                        new ResourceNotFoundException(
+                                "Job not found"));
 
         JobDto jobDto = new JobDto();
 
@@ -94,31 +103,40 @@ public class JobServiceImpl implements JobService {
         jobDto.setDescription(job.getDescription());
         jobDto.setSalary(job.getSalary());
         jobDto.setLocation(job.getLocation());
-        jobDto.setExperienceRequired(job.getExperienceRequired());
+        jobDto.setExperienceRequired(
+                job.getExperienceRequired());
 
         return jobDto;
     }
 
     @Override
-    public void updateJob(Long id, JobDto jobDto, String email) {
+    public void updateJob(
+            Long id,
+            JobDto jobDto,
+            String email) {
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("User not found"));
+                        new ResourceNotFoundException(
+                                "User not found"));
 
         RecruiterProfile recruiterProfile =
                 recruiterProfileRepository.findByUser(user)
                         .orElseThrow(() ->
-                                new ResourceNotFoundException("Recruiter not found"));
+                                new ResourceNotFoundException(
+                                        "Recruiter not found"));
 
         Company company = recruiterProfile.getCompany();
 
         Job job = jobRepository.findById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("Job not found"));
+                        new ResourceNotFoundException(
+                                "Job not found"));
 
-        if (!job.getCompany().getId().equals(company.getId())) {
-            throw new RuntimeException(
+        if (!job.getCompany().getId()
+                .equals(company.getId())) {
+
+            throw new ForbiddenException(
                     "You are not allowed to update this job");
         }
 
@@ -126,31 +144,39 @@ public class JobServiceImpl implements JobService {
         job.setDescription(jobDto.getDescription());
         job.setSalary(jobDto.getSalary());
         job.setLocation(jobDto.getLocation());
-        job.setExperienceRequired(jobDto.getExperienceRequired());
+        job.setExperienceRequired(
+                jobDto.getExperienceRequired());
 
         jobRepository.save(job);
     }
 
     @Override
-    public void deleteJob(Long id, String email) {
+    public void deleteJob(
+            Long id,
+            String email) {
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("User not found"));
+                        new ResourceNotFoundException(
+                                "User not found"));
 
         RecruiterProfile recruiterProfile =
                 recruiterProfileRepository.findByUser(user)
                         .orElseThrow(() ->
-                                new ResourceNotFoundException("Recruiter not found"));
+                                new ResourceNotFoundException(
+                                        "Recruiter not found"));
 
         Company company = recruiterProfile.getCompany();
 
         Job job = jobRepository.findById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("Job not found"));
+                        new ResourceNotFoundException(
+                                "Job not found"));
 
-        if (!job.getCompany().getId().equals(company.getId())) {
-            throw new RuntimeException(
+        if (!job.getCompany().getId()
+                .equals(company.getId())) {
+
+            throw new ForbiddenException(
                     "You are not allowed to delete this job");
         }
 
@@ -167,6 +193,7 @@ public class JobServiceImpl implements JobService {
 
         return jobRepository.findById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("Job not found"));
+                        new ResourceNotFoundException(
+                                "Job not found"));
     }
 }

@@ -1,14 +1,20 @@
 package com.mownika.jobportal.config;
 
+import com.mownika.jobportal.exception.CustomAccessDeniedHandler;
+import com.mownika.jobportal.exception.CustomAuthenticationEntryPoint;
 import com.mownika.jobportal.service.CustomUserDetailsService;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -52,6 +58,16 @@ public class SecurityConfig {
     }
 
     @Bean
+    public CustomAuthenticationEntryPoint authenticationEntryPoint() {
+        return new CustomAuthenticationEntryPoint();
+    }
+
+    @Bean
+    public CustomAccessDeniedHandler accessDeniedHandler() {
+        return new CustomAccessDeniedHandler();
+    }
+
+    @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http) throws Exception {
 
@@ -64,30 +80,35 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(
                                 SessionCreationPolicy.STATELESS))
 
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(
+                                authenticationEntryPoint())
+                        .accessDeniedHandler(
+                                accessDeniedHandler())
+                )
+
                 .authorizeHttpRequests(auth -> auth
 
-                        .requestMatchers(
-                                "/api/auth/**"
-                        ).permitAll()
+                .requestMatchers("/api/auth/**")
+                .permitAll()
 
-                        .requestMatchers(
-                                "/api/jobseeker/**"
-                        ).hasAuthority("JOB_SEEKER")
+                .requestMatchers("/api/jobseeker/**")
+                .hasAuthority("JOB_SEEKER")
 
-                        .requestMatchers(
-                                "/api/recruiter/**"
-                        ).hasAuthority("RECRUITER")
+                .requestMatchers("/api/recruiter/**")
+                .hasAuthority("RECRUITER")
 
-                        .requestMatchers(
-                                "/api/jobs/**"
-                        ).authenticated()
+                .requestMatchers("/api/jobs/**")
+                .authenticated()
 
-                        .requestMatchers(
-                                "/api/test/**"
-                        ).authenticated()
+                .requestMatchers("/api/test/recruiter-only")
+                .hasAuthority("RECRUITER")
 
-                        .anyRequest().authenticated()
-                )
+                .requestMatchers("/api/test/**")
+                .authenticated()
+
+                .anyRequest().authenticated()
+        )
 
                 .addFilterBefore(
                         jwtAuthenticationFilter,

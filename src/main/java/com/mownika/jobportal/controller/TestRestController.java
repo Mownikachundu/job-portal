@@ -12,4 +12,9 @@ public class TestRestController {
     public String protectedApi() {
         return "You are authenticated";
     }
+
+    @GetMapping("/recruiter-only")
+    public String recruiterOnly() {
+        return "You are a recruiter";
+    }
 }
